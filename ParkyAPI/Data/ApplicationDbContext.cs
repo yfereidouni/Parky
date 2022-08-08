@@ -9,7 +9,7 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
-    public DbSet<NationalPark> NationalParks => Set<NationalPark>();
-    //public DbSet<NationalPark> NationalParks { get; set; }
+    //public DbSet<NationalPark> NationalParks => Set<NationalPark>();
+    public DbSet<NationalPark> NationalParks { get; set; }
 
 }
