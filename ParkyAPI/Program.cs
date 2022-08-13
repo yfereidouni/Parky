@@ -21,7 +21,6 @@ builder.Services.AddAutoMapper(typeof(ParkyMappings));
 
 var app = builder.Build();
 
-
 //Auto-Migration ---------------------------------------------------------
 using (var scope = app.Services.CreateScope())
 {
