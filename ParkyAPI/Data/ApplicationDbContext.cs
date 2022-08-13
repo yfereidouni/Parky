@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ParkyAPI.Models;
-using ParkyAPI.Models.DTOs;
 
 namespace ParkyAPI.Data;
 
