@@ -91,4 +91,21 @@ public class NationalParksController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{nationalParkId:int}", Name = "DeleteNationalPark")]
+    public IActionResult DeleteNationalPark(int nationalParkId)
+    {
+        if (!_npRepoo.NationalParkExists(nationalParkId))
+            return NotFound();
+
+        var nationalParkObj = _npRepoo.GetNationalPark(nationalParkId);
+
+        if (!_npRepoo.DeleteNationalPark(nationalParkObj))
+        {
+            ModelState.AddModelError("", $"Something went wrong when deleting the record {nationalParkObj.Name}");
+            return StatusCode(500, ModelState);
+        }
+
+        return NoContent();
+    }
 }
