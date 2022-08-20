@@ -20,6 +20,10 @@ public class NationalParksController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Get list of National Parks.
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public IActionResult GetNationalParks()
     {
@@ -34,6 +38,11 @@ public class NationalParksController : ControllerBase
         return Ok(objDTO);
     }
 
+    /// <summary>
+    /// Get individual national park.
+    /// </summary>
+    /// <param name="nationalParkId">The Id of the National Park.</param>
+    /// <returns></returns>
     [HttpGet("{nationalParkId:int}", Name = "GetNationalPark")]
     public IActionResult GetNationalPark(int nationalParkId)
     {
@@ -47,6 +56,11 @@ public class NationalParksController : ControllerBase
         return Ok(objDTO);
     }
 
+    /// <summary>
+    /// Create individual National Park.
+    /// </summary>
+    /// <param name="nationalParkDTO"></param>
+    /// <returns></returns>
     [HttpPost]
     public IActionResult CreateNationalPark([FromBody] NationalParkDTO nationalParkDTO)
     {

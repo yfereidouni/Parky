@@ -3,6 +3,7 @@ using ParkyAPI.Data;
 using ParkyAPI.ParkyMapper;
 using ParkyAPI.Repository;
 using ParkyAPI.Repository.IRepository;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,24 @@ builder.Services.AddSwaggerGen(option =>
         {
             Title = "Parky API",
             Version = "1",
+            Description="eHubStar Parky API",
+            Contact= new Microsoft.OpenApi.Models.OpenApiContact()
+            {
+                Email="Yasser.Fereidouni@gmail.com",
+                Name="Yasser Fereidouni",
+                Url = new Uri("https://github.com/yfereidouni"),
+            },
+            License=new Microsoft.OpenApi.Models.OpenApiLicense()
+            {
+                Name = "MIT License",
+                Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+            }
         });
+    // Adding XML Documentation to UI --------------------------------------------------
+    var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var cmlCommentFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+    option.IncludeXmlComments(cmlCommentFullPath);
+    //----------------------------------------------------------------------------------
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
