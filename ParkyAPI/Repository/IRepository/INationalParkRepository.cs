@@ -1,5 +1,4 @@
 ﻿using ParkyAPI.Models;
-using ParkyAPI.Models.DTOs;
 
 namespace ParkyAPI.Repository.IRepository;
 
