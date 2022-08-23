@@ -19,14 +19,14 @@ builder.Services.AddSwaggerGen(option =>
         {
             Title = "Parky API (National Park)",
             Version = "1",
-            Description="eHubStar Parky API NP",
-            Contact= new Microsoft.OpenApi.Models.OpenApiContact()
+            Description = "eHubStar Parky API NP",
+            Contact = new Microsoft.OpenApi.Models.OpenApiContact()
             {
-                Email="Yasser.Fereidouni@gmail.com",
-                Name="Yasser Fereidouni",
+                Email = "Yasser.Fereidouni@gmail.com",
+                Name = "Yasser Fereidouni",
                 Url = new Uri("https://github.com/yfereidouni"),
             },
-            License=new Microsoft.OpenApi.Models.OpenApiLicense()
+            License = new Microsoft.OpenApi.Models.OpenApiLicense()
             {
                 Name = "MIT License",
                 Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
@@ -74,6 +74,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 }
 //-------------------------------------------------------------------------
+//var provider = IApplicationBuilder();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
