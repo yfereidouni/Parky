@@ -57,7 +57,7 @@ public class NationalParksController : ControllerBase
 
         if (obj == null)
             return NotFound();
-        
+
         /* Auto-Mapper vs Nomarl Mappings----------------------- */
         var objDTO = _mapper.Map<NationalParkDTO>(obj);
         //var onjDTO = new NationalParkDTO
@@ -107,7 +107,11 @@ public class NationalParksController : ControllerBase
 
         //return Ok();
         //return Ok(nationalParkObj);
-        return CreatedAtRoute("GetNationalPark", new { nationalParkId = nationalParkObj.Id }, nationalParkObj);
+        return CreatedAtRoute("GetNationalPark", new
+        {
+            Version = HttpContext.GetRequestedApiVersion().ToString(),
+            nationalParkId = nationalParkObj.Id
+        }, nationalParkObj);
     }
 
     [HttpPatch("{nationalParkId:int}", Name = "UpdateNationalPark")]

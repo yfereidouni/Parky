@@ -22,9 +22,9 @@ builder.Services.AddSwaggerGen();
 
 #region SwaggerGenOptions
 /*
-builder.Services.AddSwaggerGen(option =>
+builder.Services.AddSwaggerGen(options =>
 {
-    option.SwaggerDoc("ParkyOpenAPISpecNP",
+    options.SwaggerDoc("ParkyOpenAPISpecNP",
         new Microsoft.OpenApi.Models.OpenApiInfo()
         {
             Title = "Parky API (National Park)",
@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(option =>
                 Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
             }
         });
-    option.SwaggerDoc("ParkyOpenAPISpecTrails",
+    options.SwaggerDoc("ParkyOpenAPISpecTrails",
     new Microsoft.OpenApi.Models.OpenApiInfo()
     {
         Title = "Parky API (Trails)",
@@ -64,7 +64,7 @@ builder.Services.AddSwaggerGen(option =>
     // Adding XML Documentation to UI --------------------------------------------------
     var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var cmlCommentFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
-    option.IncludeXmlComments(cmlCommentFullPath);
+    options.IncludeXmlComments(cmlCommentFullPath);
     //----------------------------------------------------------------------------------
 });
 */
@@ -84,12 +84,10 @@ builder.Services.AddApiVersioning(options =>
     options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
     options.ReportApiVersions = true;
 });
-
-builder.Services.AddVersionedApiExplorer(options => 
+builder.Services.AddVersionedApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'VVV";
 });
-
 //--------------------------------------------------------------------------------
 
 var app = builder.Build();
@@ -100,7 +98,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();
-    
+
 }
 //-------------------------------------------------------------------------
 
@@ -120,12 +118,10 @@ var provider = builder.Services.BuildServiceProvider()
 app.UseSwaggerUI(options =>
 {
     foreach (var desc in provider.ApiVersionDescriptions)
-    {
         options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json", desc.GroupName.ToUpperInvariant());
-        options.RoutePrefix = "";
-    }
-});
 
+    options.RoutePrefix = "";
+});
 
 //app.UseSwaggerUI(options =>
 //{
