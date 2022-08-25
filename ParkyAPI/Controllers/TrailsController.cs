@@ -58,8 +58,28 @@ public class TrailsController : ControllerBase
 
         if (obj == null)
             return NotFound();
-        
+
         var objDTO = _mapper.Map<TrailDTO>(obj);
+
+        return Ok(objDTO);
+    }
+
+    [HttpGet("[action]/{nationalParkId:int}")]
+    [ProducesResponseType(200, Type = typeof(TrailDTO))]
+    [ProducesResponseType(404)]
+    [ProducesDefaultResponseType]
+    public IActionResult GetTrailsInNationalPark(int nationalParkId)
+    {
+        var objList = _trailRepoo.GetTrailsInNationalPark(nationalParkId);
+
+        if (objList == null)
+            return NotFound();
+
+        var objDTO = new List<TrailDTO>();
+        foreach (var obj in objList)
+        {
+            objDTO.Add(_mapper.Map<TrailDTO>(obj));
+        }
 
         return Ok(objDTO);
     }
