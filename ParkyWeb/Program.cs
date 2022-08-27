@@ -1,6 +1,11 @@
+using ParkyWeb.Repository;
+using ParkyWeb.Repository.IRepository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<INationalParkRepository, NationalParkRepository>();
+builder.Services.AddScoped<ITrailRepository, TrailRepository>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
