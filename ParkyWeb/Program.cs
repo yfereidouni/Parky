@@ -1,3 +1,4 @@
+using ParkyWeb;
 using ParkyWeb.Repository;
 using ParkyWeb.Repository.IRepository;
 
@@ -7,6 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<INationalParkRepository, NationalParkRepository>();
 builder.Services.AddScoped<ITrailRepository, TrailRepository>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+//Without thi line you get this error :----------------------------------------
+//Unable to resolve service for type 'System.Net.Http.HttpClient'--------------
+builder.Services.AddHttpClient<SD>(options =>
+{
+    options.BaseAddress = new Uri(SD.APIBaseUrl);
+});
+//-----------------------------------------------------------------------------
 
 var app = builder.Build();
 
