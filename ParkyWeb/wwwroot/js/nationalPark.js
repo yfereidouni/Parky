@@ -12,7 +12,8 @@ function loadDataTable() {
             "datatype": "json"
         },
         "columns": [
-            { "data": "name", "width": "50%" },
+            { "data": "id", "width": "10%" },
+            { "data": "name", "width": "45%" },
             { "data": "state", "width": "20%" },
             {
                 "data": "id",
