@@ -13,10 +13,12 @@ namespace ParkyWeb.Controllers
             _npRepoo = npRepoo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View(new NationalPark() { });
-            //return View();
+            
+            //var result = await _npRepoo.GetAllAsync(SD.NationalParkAPIPath);
+            //return View(result);
         }
 
         public async Task<IActionResult> GetAllNationalPark()
