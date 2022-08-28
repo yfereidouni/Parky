@@ -21,7 +21,8 @@ namespace ParkyWeb.Controllers
 
         public async Task<IActionResult> GetAllNationalPark()
         {
-            return Json(new { data = await _npRepoo.GetAllAsync(SD.NationalParkAPIPath) });
+            JsonResult jR =  Json(new { data = await _npRepoo.GetAllAsync(SD.NationalParkAPIPath) });
+            return jR;
         }
     }
 }
