@@ -53,7 +53,7 @@ public class Repository<T> : IRepository<T> where T : class
 
     public async Task<IEnumerable<T>> GetAllAsync(string url)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, url);
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
         var client = _clientFactory.CreateClient();
         HttpResponseMessage response = await client.SendAsync(request);
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
