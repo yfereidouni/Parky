@@ -25,3 +25,27 @@
 @section Scripts{
     <script src="~/js/nationalPark.js"></script>
 }
+
+
+@*@using ParkyWeb.Models;
+@model IEnumerable<NationalPark>
+@{
+    ViewData["Title"] = "List of NationalParks";
+}
+<table id="tblData" class="table table-bordered table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.State)</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+                  <tr>
+                   <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Name)
+                     </td>
+                    <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                 </tr>
+    }
+</table>*@
