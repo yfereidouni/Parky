@@ -66,7 +66,7 @@ public class Repository<T> : IRepository<T> where T : class
 
     public async Task<T> GetAsync(string url, int Id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, url + Id);
+        var request = new HttpRequestMessage(HttpMethod.Get, url + Id);
         var client = _clientFactory.CreateClient();
         HttpResponseMessage response = await client.SendAsync(request);
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
