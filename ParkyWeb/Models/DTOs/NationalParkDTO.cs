@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ParkyAPI.Models.DTOs;
+namespace ParkyWeb.Models.DTOs;
 
 public class NationalParkDTO
 {
@@ -10,7 +10,7 @@ public class NationalParkDTO
     [Required]
     public string State { get; set; } = "";
     public DateTime Created { get; set; }
-    public string Picture { get; set; }
+    public string CurrentPicture { get; set; }
+    public IFormFile? Picture { get; set; }
     public DateTime Established { get; set; }
 }
-
