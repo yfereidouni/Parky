@@ -1,7 +1,10 @@
-﻿@model NationalPark
+﻿@using ParkyWeb.Models.DTOs
+@model NationalParkDTO
 
 @{
     var title = "Create National Park";
+
+    var imgSrc = String.Format("data:image/jpg;base64,{0}", Model.CurrentPicture);
 }
 
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
@@ -42,7 +45,11 @@
                     <label asp-for="Picture"></label>
                 </div>
                 <div class="col-8">
-                    <input type="file" asp-for="Picture" id="projectImage" name="files" multiple class="form-control" />
+                    @*<input type="file" asp-for="Picture" id="projectImage" name="Picture" multiple class="form-control" />*@
+                    @*<input type="file" asp-for="Picture" id="imgInp" accept="image/*"  class="form-control" />*@
+                    <input asp-for="Picture" id="imgInp" type="file" accept="image/*" name="Picture" class="form-control" />
+
+
                 </div>
             </div>
 
@@ -74,12 +81,21 @@
             </div>
         </div>
         <div class="col-4 text-right" style="width:250px;">
+
+            <img id="blah" src="@imgSrc" width="100%" class="img-thumbnail" alt="@Model.Name" />
+
             @if (Model.Picture != null)
             {
-                var base64 = Convert.ToBase64String(Model.Picture);
-                var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);
-                <img src="@imgSrc" width="100%" />
+                @*var base64 = Convert.ToBase64String(Model.Picture);*@
+                @*var imgSrc = string.Format("data:image/jpg;base64,{0}", base64);*@
+                @*<img src="@imgSrc" width="100%" />*@
                 @*<img src="https://via.placeholder.com/150" width="100%" />*@
+
+
+                @*var imgSrc = String.Format("data:image/gif;base64,{0}", Model.Picture);*@
+                <img id="blah" src="@imgSrc" width="100%" class="img-thumbnail" alt="@Model.Name" />
+                @*<img id="blah" src="@imgSrc" height="150" width="150" class="img-thumbnail rounded-circle" alt="@Model.Name" />*@
+
             }
         </div>
     </div>
@@ -88,7 +104,17 @@
 
 @section Scripts{
     <script>
-        $(function () {
+
+        $(document).ready(function () {
+
+
+            imgInp.onchange = evt => {
+                const [file] = imgInp.files
+                if (file) {
+                    blah.src = URL.createObjectURL(file)
+                }
+            }
+
             $('#datepicker').datepicker({
                 //changeMonth: true,
                 //changeYear: true,
@@ -98,6 +124,7 @@
                 yearRange: '1500:2022',
                 //showButtonPanel: true,
             });
-        })
+        });
+
     </script>
 }
