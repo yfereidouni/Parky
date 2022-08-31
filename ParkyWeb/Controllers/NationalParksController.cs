@@ -8,18 +8,18 @@ namespace ParkyWeb.Controllers
 {
     public class NationalParksController : Controller
     {
-        private readonly INationalParkRepository _npRepoo;
+        private readonly INationalParkRepository _npRepo;
 
-        public NationalParksController(INationalParkRepository npRepoo)
+        public NationalParksController(INationalParkRepository npRepo)
         {
-            _npRepoo = npRepoo;
+            _npRepo = npRepo;
         }
 
         public async Task<IActionResult> Index()
         {
             return View(new NationalPark() { });
 
-            //var result = await _npRepoo.GetAllAsync(SD.NationalParkAPIPath);
+            //var result = await _npRepo.GetAllAsync(SD.NationalParkAPIPath);
             //return View(result);
         }
 
@@ -35,7 +35,7 @@ namespace ParkyWeb.Controllers
             }
 
             //Flow will come here for update
-            var nationalParkObj = await _npRepoo.GetAsync(SD.NationalParkAPIPath, id.GetValueOrDefault());
+            var nationalParkObj = await _npRepo.GetAsync(SD.NationalParkAPIPath, id.GetValueOrDefault());
             obj.Id = nationalParkObj.Id;
             obj.Name = nationalParkObj.Name;
             obj.State = nationalParkObj.State;
@@ -82,17 +82,17 @@ namespace ParkyWeb.Controllers
                 }
                 else
                 {
-                    var objFromDb = await _npRepoo.GetAsync(SD.NationalParkAPIPath, obj.Id);
+                    var objFromDb = await _npRepo.GetAsync(SD.NationalParkAPIPath, obj.Id);
                     nationalPark.Picture = objFromDb.Picture;
                 }
 
                 if (obj.Id == 0) // create
                 {
-                    await _npRepoo.CreateAsync(SD.NationalParkAPIPath, nationalPark);
+                    await _npRepo.CreateAsync(SD.NationalParkAPIPath, nationalPark);
                 }
                 else //update
                 {
-                    await _npRepoo.UpdateAsync(SD.NationalParkAPIPath + obj.Id, nationalPark);
+                    await _npRepo.UpdateAsync(SD.NationalParkAPIPath + obj.Id, nationalPark);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -105,14 +105,14 @@ namespace ParkyWeb.Controllers
 
         public async Task<IActionResult> GetAllNationalPark()
         {
-            JsonResult jR = Json(new { data = await _npRepoo.GetAllAsync(SD.NationalParkAPIPath) });
+            JsonResult jR = Json(new { data = await _npRepo.GetAllAsync(SD.NationalParkAPIPath) });
             return jR;
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var status = await _npRepoo.DeleteAsync(SD.NationalParkAPIPath, id);
+            var status = await _npRepo.DeleteAsync(SD.NationalParkAPIPath, id);
 
             if (status)
             {
