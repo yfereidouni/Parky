@@ -14,12 +14,12 @@ namespace ParkyAPI.Controllers;
 [ProducesResponseType(StatusCodes.Status400BadRequest)]
 public class NationalParksController : ControllerBase
 {
-    private readonly INationalParkRepository _npRepoo;
+    private readonly INationalParkRepository _npRepo;
     private readonly IMapper _mapper;
 
     public NationalParksController(INationalParkRepository npRepo, IMapper mapper)
     {
-        _npRepoo = npRepo;
+        _npRepo = npRepo;
         _mapper = mapper;
     }
 
@@ -33,7 +33,7 @@ public class NationalParksController : ControllerBase
     {
         // Hint : We should NOT expose our domain model to MVC View.
         // So we send DTOs to the MVC View 
-        var objList = _npRepoo.GetNationalParks();
+        var objList = _npRepo.GetNationalParks();
         var objDTO = new List<NationalParkDTO>();
         foreach (var obj in objList)
         {
@@ -53,7 +53,7 @@ public class NationalParksController : ControllerBase
     [ProducesDefaultResponseType]
     public IActionResult GetNationalPark(int nationalParkId)
     {
-        var obj = _npRepoo.GetNationalPark(nationalParkId);
+        var obj = _npRepo.GetNationalPark(nationalParkId);
 
         if (obj == null)
             return NotFound();
@@ -88,7 +88,7 @@ public class NationalParksController : ControllerBase
         if (nationalParkDTO == null)
             return BadRequest(ModelState);
 
-        if (_npRepoo.NationalParkExists(nationalParkDTO.Name))
+        if (_npRepo.NationalParkExists(nationalParkDTO.Name))
         {
             ModelState.AddModelError("", "National Park Exists!");
             return StatusCode(404, ModelState);
@@ -99,7 +99,7 @@ public class NationalParksController : ControllerBase
 
         var nationalParkObj = _mapper.Map<NationalPark>(nationalParkDTO);
 
-        if (!_npRepoo.CreateNationalPark(nationalParkObj))
+        if (!_npRepo.CreateNationalPark(nationalParkObj))
         {
             ModelState.AddModelError("", $"Something went wrong when saving the record {nationalParkObj.Name}");
             return StatusCode(500, ModelState);
@@ -125,7 +125,7 @@ public class NationalParksController : ControllerBase
 
         var nationalParkObj = _mapper.Map<NationalPark>(nationalParkDTO);
 
-        if (!_npRepoo.UpdateNationalPark(nationalParkObj))
+        if (!_npRepo.UpdateNationalPark(nationalParkObj))
         {
             ModelState.AddModelError("", $"Something went wrong when updating the record {nationalParkObj.Name}");
             return StatusCode(500, ModelState);
@@ -141,12 +141,12 @@ public class NationalParksController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult DeleteNationalPark(int nationalParkId)
     {
-        if (!_npRepoo.NationalParkExists(nationalParkId))
+        if (!_npRepo.NationalParkExists(nationalParkId))
             return NotFound();
 
-        var nationalParkObj = _npRepoo.GetNationalPark(nationalParkId);
+        var nationalParkObj = _npRepo.GetNationalPark(nationalParkId);
 
-        if (!_npRepoo.DeleteNationalPark(nationalParkObj))
+        if (!_npRepo.DeleteNationalPark(nationalParkObj))
         {
             ModelState.AddModelError("", $"Something went wrong when deleting the record {nationalParkObj.Name}");
             return StatusCode(500, ModelState);

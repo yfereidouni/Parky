@@ -15,12 +15,12 @@ namespace ParkyAPI.Controllers;
 [ProducesResponseType(StatusCodes.Status400BadRequest)]
 public class NationalParksV2Controller : ControllerBase
 {
-    private readonly INationalParkRepository _npRepoo;
+    private readonly INationalParkRepository _npRepo;
     private readonly IMapper _mapper;
 
     public NationalParksV2Controller(INationalParkRepository npRepo, IMapper mapper)
     {
-        _npRepoo = npRepo;
+        _npRepo = npRepo;
         _mapper = mapper;
     }
 
@@ -34,7 +34,7 @@ public class NationalParksV2Controller : ControllerBase
     {
         // Hint : We should NOT expose our domain model to MVC View.
         // So we send DTOs to the MVC View 
-        var obj = _npRepoo.GetNationalParks().FirstOrDefault();
+        var obj = _npRepo.GetNationalParks().FirstOrDefault();
         var objDTO = new List<NationalParkDTO>();
         objDTO.Add(_mapper.Map<NationalParkDTO>(obj));
         return Ok(objDTO);
