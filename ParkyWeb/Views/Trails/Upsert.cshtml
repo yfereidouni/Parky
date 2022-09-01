@@ -7,15 +7,15 @@
     //var imgSrc = String.Format("data:image/jpg;base64,{0}", Model.CurrentPicture);
 }
 
-<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+<form method="post" asp-action="Upsert">
 
     <div class="row px-2 mx-2 backgroundWhite border">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @if (Model.Trail.Id != 0)
-            {
-                <input type="hidden" asp-for="Trail.Id" />
-                title = "Edit Trail";
-            }
+        @if (Model.Id != 0)
+        {
+            <input type="hidden" asp-for="Id" />
+            title = "Edit Trail";
+        }
 
         <div class="col-12 p-3">
             <h2 class="text-primary">@title</h2>
@@ -26,25 +26,32 @@
                     National Park
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(m=>m.Trail.NationalParkId,
-                    Model.NationalParkList,"- Please select a park", new { @class="form-control" })
+
+                    @*@Html.DropDownListFor(m=>m.Trail.NationalParkId,
+                    Model.NationalParkList,"-Please select a park-", new { @class="form-control" })
+                    <span asp-validation-for="NationalParkList" class="text-danger"></span>*@
+                    
+                    <select data-placeholder="-Please select a park-" asp-for="NationalParkId" class="form-control" asp-items="ViewBag.NationalParks"></select>
+                    <span asp-validation-for="NationalParkId" class="text-danger"></span>
+                    <input type="hidden" name="Model.NationalParkList" />
+
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Trail.Name"></label>
+                    <label asp-for="Name"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Trail.Name" class="form-control" />
-                    <span asp-validation-for="Trail.Name" class="text-danger"></span>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Trail.Difficulty"></label>
+                    <label asp-for="Difficulty"></label>
                 </div>
                 <div class="col-8">
-                    <select asp-for="Trail.Difficulty"
+                    <select asp-for="Difficulty"
                             asp-items="Html.GetEnumSelectList<Trail.DifficultyType>()"
                             class="form-control"></select>
                 </div>
@@ -52,27 +59,27 @@
 
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Trail.Distance"></label>
+                    <label asp-for="Distance"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Trail.Distance" class="form-control" />
-                    <span asp-validation-for="Trail.Distance" class="text-danger"></span>
+                    <input asp-for="Distance" class="form-control" />
+                    <span asp-validation-for="Distance" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="Trail.Elevation"></label>
+                    <label asp-for="Elevation"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Trail.Elevation" class="form-control" />
-                    <span asp-validation-for="Trail.Elevation" class="text-danger"></span>
+                    <input asp-for="Elevation" class="form-control" />
+                    <span asp-validation-for="Elevation" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-4 offset-4 mt-2">
                     <button type="submit" class="btn btn-primary form-control">
-                        @(Model.Trail.Id != 0 ? "Update" : "Create")
+                        @(Model.Id != 0 ? "Update" : "Create")
                     </button>
                 </div>
                 <div class="col-4 mt-2">

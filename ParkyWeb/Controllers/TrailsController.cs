@@ -5,6 +5,7 @@ using ParkyWeb.Models.DTOs;
 using ParkyWeb.Models.ViewModel;
 using ParkyWeb.Repository.IRepository;
 using System.Reflection;
+using static ParkyWeb.Models.ViewModel.TrailsVM;
 
 namespace ParkyWeb.Controllers
 {
@@ -22,25 +23,16 @@ namespace ParkyWeb.Controllers
         public async Task<IActionResult> Index()
         {
             return View(new Trail() { });
-
-            //var result = await _npRepo.GetAllAsync(SD.NationalParkAPIPath);
-            //return View(result);
         }
 
 
         public async Task<IActionResult> Upsert(int? id)
         {
+            // Fill Combobox
             IEnumerable<NationalPark> npList = await _npRepo.GetAllAsync(SD.NationalParkAPIPath);
+            ViewBag.NationalParks = new SelectList(npList, "Id", "Name");
 
-            TrailsVM objVM = new TrailsVM()
-            {
-                NationalParkList = npList.Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                }),
-                Trail = new Trail()
-            };
+            TrailsVM objVM = new TrailsVM();
 
             if (id == null)
             {
@@ -49,8 +41,15 @@ namespace ParkyWeb.Controllers
             }
 
             //Flow will come here for update
-            objVM.Trail = await _trailRepo.GetAsync(SD.TrailAPIPath, id.GetValueOrDefault());
-            if (objVM.Trail == null)
+            var trailObj = await _trailRepo.GetAsync(SD.TrailAPIPath, id.GetValueOrDefault());
+            objVM.Id = trailObj.Id;
+            objVM.Name = trailObj.Name;
+            objVM.Distance = trailObj.Distance;
+            objVM.Elevation = trailObj.Elevation;
+            objVM.Difficulty = (DifficultyType)trailObj.Difficulty;
+            objVM.NationalParkId = trailObj.NationalParkId;
+
+            if (objVM == null)
             {
                 return NotFound();
             }
@@ -63,22 +62,33 @@ namespace ParkyWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(TrailsVM obj)
         {
-            ModelState.Remove("NationalParkList"); // to omit NationalParkList Validation Error
-
             if (ModelState.IsValid)
             {
-                if (obj.Trail.Id == 0)
+                Trail newTrail = new Trail
                 {
-                    await _trailRepo.CreateAsync(SD.TrailAPIPath, obj.Trail);
+                    Id = obj.Id,
+                    Name = obj.Name,
+                    Distance = obj.Distance,
+                    Elevation = obj.Elevation,
+                    NationalParkId = obj.NationalParkId,
+                    Difficulty = (Trail.DifficultyType)obj.Difficulty,
+                };
+
+                if (obj.Id == 0)
+                {
+                    await _trailRepo.CreateAsync(SD.TrailAPIPath, newTrail);
                 }
                 else
                 {
-                    await _trailRepo.UpdateAsync(SD.TrailAPIPath + obj.Trail.Id, obj.Trail);
+                    await _trailRepo.UpdateAsync(SD.TrailAPIPath + newTrail.Id, newTrail);
                 }
                 return RedirectToAction(nameof(Index));
             }
             else
             {
+                IEnumerable<NationalPark> npList = await _npRepo.GetAllAsync(SD.NationalParkAPIPath);
+                ViewBag.NationalParks = new SelectList(npList, "Id", "Name");
+
                 return View(obj);
             }
         }
