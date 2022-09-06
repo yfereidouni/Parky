@@ -7,54 +7,69 @@
 
 <div class="container">
     <div class="row pb-4 backgroundWhite">
-        <div class="container backgroundWhite pb-4">
-            <div class="card border">
-                <div class="card-header bg-dark text-light ml-0 row container">
-                    <div class="col-12 col-md-6">
-                        <h1 class="text-warning"></h1>
+
+        @foreach (var nationalPark in Model.NationalParkList)
+        {
+            <div class="container backgroundWhite pb-4">
+                <div class="card border">
+                    <div class="card-header bg-dark text-light ml-0 container">
+                        <div class="col-12 col-md-6">
+                            <h1 class="text-warning float-start">@nationalPark.Name</h1>
+                        </div>
+                        <div class="col-12 col-md-6 float-end">
+                            <h1 class="text-warning float-end">State : @nationalPark.State</h1>
+                        </div>
                     </div>
-                    <div class="col-12 col-md-6 text-md-right">
-                        <h1 class="text-warning">State : </h1>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="container rounded p-2">
-                        <div class="row">
-                            <div class="col-12 col-lg-8">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h3 style="color:#bbb9b9">Established: </h3>
-                                    </div>
-                                    <div class="col-12">
-                                        <table class="table table-striped" style="border:1px solid #808080 ">
-                                            <tr class="table-secondary">
-                                                <th>
-                                                    Trail
-                                                </th>
-                                                <th>Distance</th>
-                                                <th>Elevation Gain</th>
-                                                <th>Difficulty</th>
-                                            </tr>
-                                            @foreach (var trail in Model.TrailList)
+                    <div class="card-body">
+                        <div class="container rounded p-2">
+                            <div class="row">
+                                <div class="col-12 col-lg-8">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h3 style="color:#bbb9b9">Established: @nationalPark.Established.Year</h3>
+                                        </div>
+                                        <div class="col-12">
+                                            @if (Model.TrailList.Where(u => u.NationalParkId == nationalPark.Id).Count() > 0)
                                             {
-                                                <tr>
-                                                    <td>@trail.Name</td>
-                                                    <td>@trail.Distance miles</td>
-                                                    <td>@trail.Elevation ft</td>
-                                                    <td>@trail.Difficulty</td>
-                                                </tr>
+                                                <table class="table table-striped" style="border:1px solid #808080 ">
+                                                    <tr class="table-secondary">
+                                                        <th>
+                                                            Trail
+                                                        </th>
+                                                        <th>Distance</th>
+                                                        <th>Elevation Gain</th>
+                                                        <th>Difficulty</th>
+                                                    </tr>
+                                                    @foreach (var trail in Model.TrailList.Where(u => u.NationalParkId == nationalPark.Id))
+                                                    {
+                                                        <tr>
+                                                            <td>@trail.Name</td>
+                                                            <td>@trail.Distance miles</td>
+                                                            <td>@trail.Elevation ft</td>
+                                                            <td>@trail.Difficulty</td>
+                                                        </tr>
+                                                    }
+                                                </table>
                                             }
-                                        </table>
+                                            else
+                                            {
+                                                <p>No Trail exists...</p>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 col-lg-4 text-center">
-                                <img src="https://via.placeholder.com/150" class="card-img-top p-2 rounded" width="100%" />
+                                <div class="col-12 col-lg-4 text-center">
+                                    @{
+                                        var imgSrc = String.Format("data:image/jpg;base64,{0}", nationalPark.Picture);
+                                    }
+                                    <img src="@imgSrc" class="card-img-top p-2 rounded" width="100%" />
+                                    @*<img src="https://via.placeholder.com/150" class="card-img-top p-2 rounded" width="100%" />*@
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>

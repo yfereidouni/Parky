@@ -23,12 +23,12 @@ namespace ParkyWeb.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IndexVM indexVM = new IndexVM()
+            IndexVM listOfParksAndTrails = new IndexVM()
             {
                 NationalParkList = await _npRepo.GetAllAsync(SD.NationalParkAPIPath),
                 TrailList = await _trailRepo.GetAllAsync(SD.TrailAPIPath)
             };
-            return View(indexVM);
+            return View(listOfParksAndTrails);
         }
 
         public IActionResult Privacy()
