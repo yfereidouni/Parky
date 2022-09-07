@@ -11,5 +11,5 @@ public class ApplicationDbContext : DbContext
     //public DbSet<NationalPark>? NationalParks { get; set; }
     public DbSet<NationalPark> NationalParks => Set<NationalPark>();
     public DbSet<Trail> Trails => Set<Trail>();
-
+    public DbSet<User> Users => Set<User>();
 }
