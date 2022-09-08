@@ -102,6 +102,8 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
+builder.Services.AddCors();
+
 builder.Services.AddScoped<INationalParkRepository, NationalParkRepository>();
 builder.Services.AddScoped<ITrailRepository, TrailRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

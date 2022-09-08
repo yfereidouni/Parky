@@ -25,7 +25,7 @@ namespace ParkyAPI.Repository
             var user = _db.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // User NOT found
-            if (user ==null)
+            if (user == null)
             {
                 return null;
             }
@@ -33,30 +33,49 @@ namespace ParkyAPI.Repository
             //if user Found then generate JWT Token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor 
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] 
+                Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name,user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials
-                        (new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
+                        (new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
-            
+            user.Password = string.Empty;
             return user;
         }
 
         public bool IsUniqueUser(string username)
         {
-            throw new NotImplementedException();
+            var user = _db.Users.SingleOrDefault(x => x.Username == username);
+
+            //return null if user not found
+            if (user == null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public User Register(string username, string password)
         {
-            throw new NotImplementedException();
+            User userObj = new User
+            {
+                Username = username,
+                Password = password,
+                Role = string.Empty
+            };
+
+            _db.Users.Add(userObj);
+            _db.SaveChanges();
+            userObj.Password = string.Empty;
+            
+            return userObj;
         }
     }
 }
