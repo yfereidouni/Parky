@@ -109,7 +109,7 @@ builder.Services.AddScoped<ITrailRepository, TrailRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(typeof(ParkyMappings));
 
-//Showing version in Swagger UI -------------------------------------------------
+//Showing version in Swagger UI ----------------------------------------------------
 builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true; // Load default version
@@ -120,11 +120,11 @@ builder.Services.AddVersionedApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'VVV";
 });
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
 
 var app = builder.Build();
 
-//Auto-Migration ---------------------------------------------------------
+//Auto-Migration -------------------------------------------------------------------
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -132,7 +132,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 
 }
-//-------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -163,10 +163,14 @@ app.UseSwaggerUI(options =>
 //});
 
 app.UseRouting();
+
+//Cross-Origin-Resource-Sharing: ---------------------------------------------------
+//Accepting request from one origin to access resources in another origin ----------
 app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
+//----------------------------------------------------------------------------------
 
 app.UseAuthentication();
 app.UseAuthorization();
