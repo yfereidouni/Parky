@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ParkyWeb.Models;
 using ParkyWeb.Models.DTOs;
 using ParkyWeb.Repository.IRepository;
@@ -6,6 +7,7 @@ using System.Reflection;
 
 namespace ParkyWeb.Controllers
 {
+    [Authorize]
     public class NationalParksController : Controller
     {
         private readonly INationalParkRepository _npRepo;
@@ -23,7 +25,7 @@ namespace ParkyWeb.Controllers
             //return View(result);
         }
 
-
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Upsert(int? id)
         {
             NationalParkDTO obj = new NationalParkDTO();
@@ -35,7 +37,7 @@ namespace ParkyWeb.Controllers
             }
 
             //Flow will come here for update
-            var nationalParkObj = await _npRepo.GetAsync(SD.NationalParkAPIPath, id.GetValueOrDefault());
+            var nationalParkObj = await _npRepo.GetAsync(SD.NationalParkAPIPath, id.GetValueOrDefault(), HttpContext.Session.GetString("JWToken"));
             obj.Id = nationalParkObj.Id;
             obj.Name = nationalParkObj.Name;
             obj.State = nationalParkObj.State;
@@ -82,17 +84,17 @@ namespace ParkyWeb.Controllers
                 }
                 else
                 {
-                    var objFromDb = await _npRepo.GetAsync(SD.NationalParkAPIPath, obj.Id);
+                    var objFromDb = await _npRepo.GetAsync(SD.NationalParkAPIPath, obj.Id, HttpContext.Session.GetString("JWToken"));
                     nationalPark.Picture = objFromDb.Picture;
                 }
 
                 if (obj.Id == 0) // create
                 {
-                    await _npRepo.CreateAsync(SD.NationalParkAPIPath, nationalPark);
+                    await _npRepo.CreateAsync(SD.NationalParkAPIPath, nationalPark, HttpContext.Session.GetString("JWToken"));
                 }
                 else //update
                 {
-                    await _npRepo.UpdateAsync(SD.NationalParkAPIPath + obj.Id, nationalPark);
+                    await _npRepo.UpdateAsync(SD.NationalParkAPIPath + obj.Id, nationalPark, HttpContext.Session.GetString("JWToken"));
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -105,14 +107,15 @@ namespace ParkyWeb.Controllers
 
         public async Task<IActionResult> GetAllNationalPark()
         {
-            JsonResult jR = Json(new { data = await _npRepo.GetAllAsync(SD.NationalParkAPIPath) });
+            JsonResult jR = Json(new { data = await _npRepo.GetAllAsync(SD.NationalParkAPIPath, HttpContext.Session.GetString("JWToken")) });
             return jR;
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            var status = await _npRepo.DeleteAsync(SD.NationalParkAPIPath, id);
+            var status = await _npRepo.DeleteAsync(SD.NationalParkAPIPath, id, HttpContext.Session.GetString("JWToken"));
 
             if (status)
             {
